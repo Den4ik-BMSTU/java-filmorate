@@ -1,29 +1,37 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.Data;
+import lombok.NonNull;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Past;
+import javax.validation.constraints.NotNull;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Data
 public class User {
-
-    private int id;
-    @Email
-    private final String email;
+    private Integer id;
     @NotBlank
-    private final String login;
+    @Email
+    private String email;
+    @NotBlank
+    private String login;
     private String name;
-    @Past
-    private final LocalDate birthday;
+    private LocalDate birthday;
 
-    public void setId(int id) {
-        this.id = id;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id.equals(user.id);
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
