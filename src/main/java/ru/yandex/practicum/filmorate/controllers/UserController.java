@@ -1,60 +1,64 @@
 package ru.yandex.practicum.filmorate.controllers;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exeptions.BadRequestException;
-import ru.yandex.practicum.filmorate.exeptions.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.services.UserService;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import static ru.yandex.practicum.filmorate.validator.Validator.validate;
+import java.util.Set;
 
 @RestController
 @Slf4j
 @RequestMapping("/users")
 public class UserController {
 
-    private final Map<Integer, User> users = new HashMap<>();
-    private int id = 1;
+    private final UserService userService;
+
+    @Autowired
+    public UserController(UserService service) {
+        this.userService = service;
+    }
 
     @GetMapping
     public List<User> getUsers() {
-        return new ArrayList<>(users.values());
+        return userService.getAll();
+    }
+
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable int id) {
+        return userService.getById(id);
     }
 
     @PostMapping
-    public User addUser(@RequestBody @Valid User user) throws BadRequestException {
-        validate(user);
-        // По ТЗ - если у пользователя не задано имя, то вместо имени использовать логин.
-        if ((user.getName() == null) || user.getName().isBlank()) {
-            user.setName(user.getLogin());
-        }
-        user.setId(generateId());
-        users.put(user.getId(), user);
-        log.info("Пользователь добавлен");
-        return user;
+    public User addUser(@RequestBody @Valid User user) {
+        return userService.add(user);
     }
 
     @PutMapping
-    public User updateUser(@RequestBody @Valid User user) throws BadRequestException {
-        validate(user);
-        if (!users.containsKey(user.getId())) {
-            throw new NotFoundException("Пользователь по ID " + user.getId() + " не найден!");
-        }
-        if ((user.getName() == null) || user.getName().isBlank()) {
-            user.setName(user.getLogin());
-        }
-        users.put(user.getId(), user);
-        log.info("Данные пользователя обновлены");
-        return user;
+    public User updateUser(@RequestBody @Valid User user) {
+        return userService.update(user);
     }
 
-    private int generateId() {
-        return id++;
+    @PutMapping("/{id}/friends/{friendId}")
+    public User addToFriends(@PathVariable int id, @PathVariable int friendId) {
+        return userService.addFriend(userService.getById(id), userService.getById(friendId));
+    }
+
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public User removeFromFriends(@PathVariable int id, @PathVariable int friendId) {
+        return userService.removeFriend(userService.getById(id), userService.getById(friendId));
+    }
+
+    @GetMapping("/{id}/friends")
+    public Set<User> getFriends(@PathVariable int id) {
+        return userService.getFriends(userService.getById(id));
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public Set<User> getMutualFriends(@PathVariable int id, @PathVariable int otherId) {
+        return userService.getMutualFriends(userService.getById(id), userService.getById(otherId));
     }
 }
