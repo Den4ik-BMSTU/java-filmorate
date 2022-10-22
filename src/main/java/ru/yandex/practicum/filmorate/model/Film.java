@@ -9,6 +9,8 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import ru.yandex.practicum.filmorate.enums.*;
+
 @Data
 public class Film {
 
@@ -20,6 +22,9 @@ public class Film {
     private final LocalDate releaseDate;
     @Positive
     private final int duration;
+
+    private Set<Genre> genres;
+    private Rating rating;
 
     private Set<Integer> usersLiked = new HashSet<>();
 
