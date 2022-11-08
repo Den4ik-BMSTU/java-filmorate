@@ -16,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class FilmDaoImpl implements FilmDao {
@@ -43,7 +44,7 @@ public class FilmDaoImpl implements FilmDao {
             statement.setInt(6, film.getMpa().getId());
             return statement;
         }, keyHolder);
-        film.setId(keyHolder.getKey().intValue());
+        film.setId(Objects.requireNonNull(keyHolder.getKey()).intValue());
 
         return film;
     }

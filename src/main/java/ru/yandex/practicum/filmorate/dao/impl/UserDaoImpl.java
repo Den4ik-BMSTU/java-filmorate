@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class UserDaoImpl implements UserDao {
@@ -36,7 +37,7 @@ public class UserDaoImpl implements UserDao {
             statement.setDate(4, Date.valueOf(user.getBirthday()));
             return statement;
         }, keyHolder);
-        user.setId(keyHolder.getKey().intValue());
+        user.setId(Objects.requireNonNull(keyHolder.getKey()).intValue());
 
         return user;
     }

@@ -25,11 +25,13 @@ public class MpaController {
 
     @GetMapping
     public List<Mpa> getAll() {
+        log.info("Получен GET запрос /mpa.");
         return service.getAll();
     }
 
     @GetMapping("/{id}")
     public Mpa getById(@PathVariable int id) {
+        log.info("Получен GET запрос /mpa/{}.", id);
         return service.getById(id);
     }
 }
