@@ -26,36 +26,27 @@ class FilmDaoImplTest {
 
     @Test
     void add() {
-        // Arrange
         Film film = new Film("StarWars", "about stars and wars",
                 LocalDate.of(1970, 10, 15), 120, new Mpa(1, "G"));
-        // Act
         Film addedFilm = filmDao.add(film);
-        // Assert
         assertEquals(6, addedFilm.getId());
     }
 
     @Test
     void update() {
-        // Arrange
         Film film = new Film("StarWars", "about stars and wars",
                 LocalDate.of(1970, 10, 15), 120, new Mpa(1, "G"));
         film.setId(2);
-        // Act
         filmDao.update(film);
-        // Assert
         assertEquals(film, filmDao.getById(2));
     }
 
     @Test
     void updateWithWrongId() {
-        // Arrange
         Film film = new Film("StarWars", "about stars and wars",
                 LocalDate.of(1970, 10, 15), 120, new Mpa(1, "G"));
         film.setId(18);
-        // Act
         NotFoundException e = assertThrows(NotFoundException.class, () -> filmDao.update(film));
-        // Assert
         assertEquals("Фильм по ID 18 не найден!", e.getMessage());
 
     }
@@ -121,11 +112,8 @@ class FilmDaoImplTest {
 
     @Test
     void removeLike() {
-        // Arrange
         likesDao.add(4, 1);
-        // Act
         int result = likesDao.remove(4, 1);
-        // Assert
         assertEquals(1, result);
     }
 

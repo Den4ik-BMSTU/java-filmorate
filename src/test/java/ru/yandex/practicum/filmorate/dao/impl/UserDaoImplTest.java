@@ -25,33 +25,24 @@ class UserDaoImplTest {
 
     @Test
     void add() {
-        // Arrange
         User newUser = new User("xxx@mail.ru", "Amigo", LocalDate.of(1990, 12, 23));
-        // Act
         User addedUser = userDao.add(newUser);
-        // Assert
         assertEquals(6, addedUser.getId());
     }
 
     @Test
     void update() {
-        // Arrange
         User newUser = new User("ZZZ@mail.ru", "Boba", LocalDate.of(1995, 10, 25));
         newUser.setId(1);
-        // Act
         userDao.update(newUser);
-        // Assert
         assertEquals(newUser, userDao.getById(1));
     }
 
     @Test
     void updateWithWrongId() {
-        // Arrange
         User newUser = new User("ZZZ@mail.ru", "Boba", LocalDate.of(1995, 10, 25));
         newUser.setId(55);
-        // Act
         NotFoundException e = assertThrows(NotFoundException.class, () -> userDao.update(newUser));
-        // Assert
         assertEquals("Пользователь по ID 55 не найден!", e.getMessage());
     }
 

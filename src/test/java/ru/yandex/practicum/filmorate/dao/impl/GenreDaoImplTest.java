@@ -68,13 +68,10 @@ class GenreDaoImplTest {
 
     @Test
     void setForFilm() {
-        // Arrange
         Set<Integer> genres = new HashSet<>();
         genres.add(3);
-        // Act
         genre.setForFilm(genres, 3);
         List<Genre> starTrack = genre.getForFilm(4);
-        // Assert
         assertEquals(1, starTrack.size());
     }
 }
